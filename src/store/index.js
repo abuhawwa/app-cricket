@@ -1,8 +1,9 @@
 import { createStore } from "vuex";
+import innings from "./modules/innings";
 
 export default createStore({
-  state: {},
-  mutations: {},
-  actions: {},
-  modules: {}
+  modules: {
+    innings,
+  },
+  strict: process.env.NODE_ENV !== "production",
 });
