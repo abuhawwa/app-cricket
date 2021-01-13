@@ -2,20 +2,28 @@
   <div class="scorecard">
     <ul class="nav nav-tabs nav-justified">
       <li class="nav-item">
-        <a href="#" :class="['nav-link active']" @click="tab = 'FirstIngs'"
+        <a
+          href="#"
+          :class="['nav-link', { active: tab === 'FirstIngs' }]"
+          @click="tab = 'FirstIngs'"
           >1st Ings</a
         >
       </li>
       <li class="nav-item">
-        <a href="#" :class="['nav-link']" @click="tab = 'SecondIngs'"
+        <a
+          href="#"
+          :class="['nav-link', { active: tab === 'SecondIngs' }]"
+          @click="tab = 'SecondIngs'"
           >2nd Ings</a
         >
       </li>
       <li class="nav-item">
-        <a href="#" :class="['nav-link']" @click="tab = 'Summary'">Summary</a>
-      </li>
-      <li class="nav-item">
-        <a href="#" :class="['nav-link']" @click="tab = 'Summary'">Edit</a>
+        <a
+          href="#"
+          :class="['nav-link', { active: tab === 'Summary' }]"
+          @click="tab = 'Summary'"
+          >Summary</a
+        >
       </li>
     </ul>
     <div class="tab-content">

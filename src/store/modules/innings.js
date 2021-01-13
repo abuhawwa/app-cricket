@@ -4,6 +4,12 @@ import router from "@/router";
 export default {
   state: {
     innings: [],
+    score: {
+      runs: 0,
+      wickets: 0,
+      extras: 0,
+      overs: 0,
+    },
   },
   mutations: {
     INNINGS(state, innings) {
@@ -50,8 +56,14 @@ export default {
           console.log(error);
         });
     },
+    async toggleBatsman(item) {
+      debugger;
+      console.log(item);
+    },
   },
   getters: {
     innings: (state) => state.innings,
+    score: (state) => state.score,
+    overLimit: (state) => state.innings.overs,
   },
 };
