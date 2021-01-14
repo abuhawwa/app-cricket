@@ -18,7 +18,7 @@
             type="radio"
             :id="batsman.id"
             :value="batsman"
-            v-model="striker"
+            v-model="activeStriker"
           />
           <label :for="batsman.id">{{ batsman.name }}</label>
         </td>
@@ -48,7 +48,7 @@ export default {
       });
       return batters;
     },
-    striker: {
+    activeStriker: {
       get() {
         return this.$store.getters.getStriker;
       },
@@ -59,6 +59,7 @@ export default {
         });
         this.$store.commit("STRIKER", striker);
         this.$store.commit("NON_STRIKER", nonStriker[0]);
+        this.$store.dispatch("toggleStriker");
       },
     },
   },

@@ -56,10 +56,6 @@ export default {
           console.log(error);
         });
     },
-    async toggleBatsman(item) {
-      debugger;
-      console.log(item);
-    },
   },
   getters: {
     innings: (state) => state.innings,

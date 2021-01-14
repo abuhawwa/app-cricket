@@ -1,3 +1,4 @@
+import * as firebase from "@/firebase";
 export default {
   state: {
     batters: [],
@@ -9,17 +10,31 @@ export default {
       state.batters = items;
     },
     STRIKER(state, item) {
-      debugger;
       item.isActive = true;
       state.striker = item;
-      // this.dispatch("toggleBatsman", { item: item });
     },
     NON_STRIKER(state, item) {
       item.isActive = false;
       state.nonStriker = item;
     },
   },
-  actions: {},
+  actions: {
+    async toggleStriker({ rootGetters }) {
+      const ings = rootGetters.innings;
+      const matchId = ings.id;
+      await firebase.matchesCollection
+        .where("id", "==", parseInt(matchId))
+        .get()
+        .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            firebase.matchesCollection.doc(doc.id).update(ings);
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
   getters: {
     getBatters: (state) => state.batters,
     getStriker: (state) => state.striker,
