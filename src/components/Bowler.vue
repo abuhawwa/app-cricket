@@ -45,18 +45,14 @@ export default {
   },
   computed: {
     bowlers() {
-      let bowlers = this.ingsBowlers.filter((item) => {
+      this.$store.commit("BOWLERS", this.ingsBowlers);
+      return this.ingsBowlers.filter((item) => {
         return item.isActive;
       });
-      return bowlers;
     },
     activeBowler() {
       return this.$store.getters.getActiveBowler;
     },
-  },
-  async created() {
-    const bowler = this.bowlers;
-    await this.$store.commit("ACTIVE_BOWLER", bowler[0]);
   },
 };
 </script>

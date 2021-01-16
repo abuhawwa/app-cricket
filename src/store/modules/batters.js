@@ -25,8 +25,8 @@ export default {
       await firebase.matchesCollection
         .where("id", "==", parseInt(matchId))
         .get()
-        .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
+        .then(function(res) {
+          res.forEach(function(doc) {
             firebase.matchesCollection.doc(doc.id).update(ings);
           });
         })

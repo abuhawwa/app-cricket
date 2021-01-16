@@ -16,7 +16,7 @@
     </ul>
     <Batsman :ingsBatsmans="innings.batsmans" />
     <Bowler :ingsBowlers="innings.bowlers" />
-    <Over :data="innings.overs" />
+    <FollowOver :data="innings.overs" />
     <ScorePanel />
   </div>
 </template>
@@ -26,7 +26,9 @@ import { mapGetters } from "vuex";
 import { defineAsyncComponent } from "vue";
 const Batsman = defineAsyncComponent(() => import("@/components/Batsman.vue"));
 const Bowler = defineAsyncComponent(() => import("@/components/Bowler.vue"));
-const Over = defineAsyncComponent(() => import("@/components/Over.vue"));
+const FollowOver = defineAsyncComponent(() =>
+  import("@/components/FollowOver.vue")
+);
 const ScorePanel = defineAsyncComponent(() =>
   import("@/components/ScorePanel.vue")
 );
@@ -41,7 +43,7 @@ export default {
   components: {
     Batsman,
     Bowler,
-    Over,
+    FollowOver,
     ScorePanel,
   },
   computed: {
