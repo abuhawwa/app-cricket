@@ -139,8 +139,11 @@ export default {
       this.score(extra, "extra");
     },
     onOut(wicket) {
+      const ings = this.ings;
       this.modal.hide();
       document.getElementById("modalForm").reset();
+      if (wicket.newBatsman)
+        this.$store.commit("NEW_BATSMAN", { ings, wicket });
       this.score(wicket, "wicket");
     },
     onOver(item) {
@@ -156,6 +159,7 @@ export default {
       this.$store.commit("UNDO_INGS", ings);
     },
     score(val, type = "score") {
+      debugger;
       let striker = this.getStriker;
       let nonStriker = this.getNonStriker;
       let bowler = this.getActiveBowler;

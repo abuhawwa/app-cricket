@@ -4,16 +4,21 @@ import router from "@/router";
 export default {
   state: {
     innings: [],
-    score: {
-      runs: 0,
-      wickets: 0,
-      extras: 0,
-      overs: 0,
-    },
   },
   mutations: {
     INNINGS(state, innings) {
       state.innings = innings;
+    },
+    NEW_BATSMAN(state, { ings, wicket }) {
+      let batsmans = state.innings[ings].batsmans;
+      let batsman = {};
+      batsman = {
+        name: wicket.newBatsman,
+        id: batsmans.length + 1,
+        isActive: false,
+      };
+      batsmans.push(batsman);
+      this.commit("batters/STRIKER", batsman);
     },
     SWITCH_BOWLER(state, { ings, item }) {
       let bowlers = state.innings[ings].bowlers;
@@ -153,7 +158,7 @@ export default {
     TEAM_SCORE(state, ings) {
       let overs = state.innings[ings].overs;
       if (!overs) return false;
-      let score = state.score;
+      let score = state.innings[ings].score;
       let runs = 0;
       let balls = 0;
       let extras = 0;
@@ -235,6 +240,7 @@ export default {
         });
     },
     async updateIngs({ state, commit }, ings) {
+      debugger;
       commit("INDIVIDUAL_BATSMAN_SCORE", ings);
       commit("INDIVIDUAL_BOWLER_SCORE", ings);
       commit("TEAM_SCORE", ings);

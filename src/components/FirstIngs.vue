@@ -1,5 +1,5 @@
 <template>
-  <div class="p-2" v-if="Object.keys(innings).length">
+  <div class="p-2" v-if="Object.keys(innings?.firstIngs?.score).length">
     <Team :innings="innings.firstIngs" />
   </div>
 </template>
@@ -20,7 +20,7 @@ export default {
     ...mapGetters(["innings"]),
   },
   async created() {
-    //TODO #:
+    debugger;
     let payload = {};
     payload.id = this.$route.params.matchId;
     await this.$store.dispatch("fetchMatch", payload);

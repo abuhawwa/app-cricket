@@ -1,17 +1,17 @@
 <template>
-  <div class="team">
+  <div class="team" v-if="Object.keys(innings).length">
     <h6>{{ innings.team }}</h6>
     <ul
       class="list-unstyled d-flex justify-content-between align-items-baseline"
     >
       <li>
         <h5 class="fw-bold">
-          {{ score.runs }} - {{ score.wickets }}
-          <small>&nbsp;({{ score.overs }}/{{ overLimit }})</small>
+          {{ innings.score.runs }} - {{ innings.score.wickets }}
+          <small>&nbsp;({{ innings.score.overs }}/{{ overLimit }})</small>
         </h5>
       </li>
       <li>
-        <h6>Extras: {{ score.extras }}</h6>
+        <h6>Extras: {{ innings.score.extras }}</h6>
       </li>
     </ul>
     <Batsman :ingsBatsmans="innings.batsmans" />

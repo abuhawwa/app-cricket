@@ -63,6 +63,9 @@ export default {
   methods: {
     onWicket() {
       this.$emit("out", this.form);
+      this.form.batter = "";
+      this.form.dismissalType = {};
+      this.form.newBatsman = "";
     },
   },
 };

@@ -66,6 +66,12 @@ export default {
       const ings = !innings.firstIngs.isEnd ? "firstIngs" : "secondIngs";
       innings[ings].batsmans = batsmans;
       innings[ings].bowlers = bowlers;
+      innings[ings].score = {
+        runs: 0,
+        wickets: 0,
+        extras: 0,
+        overs: 0,
+      };
       this.$store.dispatch("addIngsPlayers", innings);
     },
   },
