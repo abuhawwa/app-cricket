@@ -61,7 +61,9 @@
           </button>
         </td>
         <td class="bg-secondary">
-          <button type="button" class="btn w-100 text-white">Ings End</button>
+          <button type="button" class="btn w-100 text-white" @click="onIngsEnd">
+            Ings End
+          </button>
         </td>
       </tr>
     </tbody>
@@ -150,6 +152,10 @@ export default {
       const ings = this.ings;
       this.toggleBatters(1, false, this.getStriker, this.getNonStriker);
       this.$store.commit("UNDO_INGS", ings);
+    },
+    onIngsEnd() {
+      const ings = this.ings;
+      this.$store.commit("INGS_END", ings);
     },
     score(val, type = "score") {
       let striker = this.getStriker;

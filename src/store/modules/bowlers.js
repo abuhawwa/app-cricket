@@ -17,11 +17,10 @@ export default {
     },
   },
   actions: {
-    async toggleBowler({ rootGetters }, { ings, item }) {
-      debugger;
-      let innings = JSON.parse(JSON.stringify(rootGetters.innings[ings]));
-      if (!innings.overs) return false;
-      let bowlers = innings.bowlers;
+    async toggleBowler({ commit, rootGetters }, { ings, item }) {
+      let innings = JSON.parse(JSON.stringify(rootGetters.innings));
+      if (!innings[ings].overs) return false;
+      let bowlers = innings[ings].bowlers;
       bowlers.forEach((item) => {
         item.isActive = false;
       });
@@ -38,7 +37,8 @@ export default {
           if (bowler.id === item.existingBowler.id) bowler.isActive = true;
         });
       }
-      innings.overs.push({ over: [{ balls: [] }] });
+      innings[ings].overs.push({ over: [{ balls: [] }] });
+      commit("INNINGS", innings);
       await firebase.matchesCollection
         .where("id", "==", parseInt(innings.id))
         .get()
@@ -46,6 +46,9 @@ export default {
           res.forEach(function(doc) {
             firebase.matchesCollection.doc(doc.id).update(innings);
           });
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
   },

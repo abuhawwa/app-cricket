@@ -166,6 +166,11 @@ export default {
 
       this.dispatch("updateIngs", ings);
     },
+    INGS_END(state, ings) {
+      let innings = state.innings[ings];
+      innings.isEnd = true;
+      this.dispatch("endIngs");
+    },
   },
   actions: {
     async addMatch({ commit }, match) {
@@ -208,10 +213,24 @@ export default {
         });
     },
     async updateIngs({ state, commit }, ings) {
-      debugger;
       commit("INDIVIDUAL_BATSMAN_SCORE", ings);
       commit("INDIVIDUAL_BOWLER_SCORE", ings);
       commit("TEAM_SCORE", ings);
+      const innings = state.innings;
+      await firebase.matchesCollection
+        .where("id", "==", parseInt(innings.id))
+        .get()
+        .then(function(res) {
+          res.forEach(function(doc) {
+            firebase.matchesCollection.doc(doc.id).update(innings);
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async endIngs({ state }) {
+      debugger;
       const innings = state.innings;
       await firebase.matchesCollection
         .where("id", "==", parseInt(innings.id))
