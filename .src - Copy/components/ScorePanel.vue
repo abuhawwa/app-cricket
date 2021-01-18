@@ -99,7 +99,7 @@
         <div class="modal-body">
           <Extra v-if="currentModal === 'Extra'" @extra="onExtra" />
           <Wicket v-if="currentModal === 'Wicket'" @out="onOut" />
-          <NewOver v-if="currentModal === 'Over'" @over="onOver" />
+          <NewBowler v-if="currentModal === 'Over'" @over="onOver" />
         </div>
       </div>
     </div>
@@ -112,7 +112,9 @@ import { mapGetters } from "vuex";
 import { defineAsyncComponent } from "vue";
 const Extra = defineAsyncComponent(() => import("@/components/Extra.vue"));
 const Wicket = defineAsyncComponent(() => import("@/components/Wicket.vue"));
-const NewOver = defineAsyncComponent(() => import("@/components/NewOver.vue"));
+const NewBowler = defineAsyncComponent(() =>
+  import("@/components/NewOver.vue")
+);
 export default {
   name: "ScorePanel",
   inject: ["ings"],
@@ -125,7 +127,7 @@ export default {
   components: {
     Extra,
     Wicket,
-    NewOver,
+    NewBowler,
   },
   computed: {
     ...mapGetters(["getStriker", "getNonStriker", "getActiveBowler"]),
@@ -137,14 +139,19 @@ export default {
       this.score(extra, "extra");
     },
     onOut(wicket) {
+      const ings = this.ings;
       this.modal.hide();
+      document.getElementById("modalForm").reset();
+      if (wicket.newBatsman)
+        this.$store.commit("NEW_BATSMAN", { ings, wicket });
       this.score(wicket, "wicket");
     },
     onOver(item) {
       this.modal.hide();
+      document.getElementById("modalForm").reset();
       const ings = this.ings;
       this.toggleBatters(0, true, this.getStriker, this.getNonStriker);
-      this.$store.dispatch("toggleBowler", { ings, item });
+      this.$store.commit("SWITCH_BOWLER", { ings, item });
     },
     onUndo() {
       const ings = this.ings;
@@ -152,6 +159,7 @@ export default {
       this.$store.commit("UNDO_INGS", ings);
     },
     score(val, type = "score") {
+      debugger;
       let striker = this.getStriker;
       let nonStriker = this.getNonStriker;
       let bowler = this.getActiveBowler;
@@ -218,7 +226,7 @@ export default {
       };
       const switchByRun = runs || bye || legBye || noBallRunBatsman;
       this.toggleBatters(switchByRun, false, striker, nonStriker);
-      this.$store.commit("ADD_SCORE_TO_INNINGS", { ings, obj, wicket });
+      this.$store.commit("ADD_SCORE_TO_INNINGS", { ings, obj });
     },
     toggleBatters(val, isOVer, striker, nonStriker) {
       if (val === 1 || val === 3 || isOVer) {

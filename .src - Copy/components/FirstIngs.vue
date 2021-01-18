@@ -1,9 +1,6 @@
 <template>
-  <div class="p-2">
-    <Team
-      :innings="innings.firstIngs"
-      v-if="typeof innings.firstIngs !== 'undefined'"
-    />
+  <div class="p-2" v-if="Object.keys(innings?.firstIngs?.score).length">
+    <Team :innings="innings.firstIngs" />
   </div>
 </template>
 
@@ -23,8 +20,7 @@ export default {
     ...mapGetters(["innings"]),
   },
   async created() {
-    const ings = this.innings;
-    if (typeof ings.firstIngs !== "undefined") return true;
+    debugger;
     let payload = {};
     payload.id = this.$route.params.matchId;
     await this.$store.dispatch("fetchMatch", payload);

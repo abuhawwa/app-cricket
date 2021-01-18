@@ -1,5 +1,5 @@
 <template>
-  <div class="team">
+  <div class="team" v-if="Object.keys(innings).length">
     <h6>{{ innings.team }}</h6>
     <ul
       class="list-unstyled d-flex justify-content-between align-items-baseline"
@@ -47,7 +47,7 @@ export default {
     ScorePanel,
   },
   computed: {
-    ...mapGetters(["overLimit"]),
+    ...mapGetters(["score", "overLimit"]),
   },
 };
 </script>

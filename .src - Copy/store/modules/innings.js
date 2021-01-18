@@ -2,12 +2,44 @@ import * as firebase from "@/firebase";
 import router from "@/router";
 
 export default {
-  state: () => ({
+  state: {
     innings: [],
-  }),
+  },
   mutations: {
     INNINGS(state, innings) {
       state.innings = innings;
+    },
+    NEW_BATSMAN(state, { ings, wicket }) {
+      let batsmans = state.innings[ings].batsmans;
+      let batsman = {};
+      batsman = {
+        name: wicket.newBatsman,
+        id: batsmans.length + 1,
+        isActive: false,
+      };
+      batsmans.push(batsman);
+      this.commit("batters/STRIKER", batsman);
+    },
+    SWITCH_BOWLER(state, { ings, item }) {
+      let bowlers = state.innings[ings].bowlers;
+      bowlers.forEach((item) => {
+        item.isActive = false;
+      });
+      let bowler = {};
+      if (item.bowler) {
+        bowler = {
+          name: item.bowler,
+          id: bowlers.length + 1,
+          isActive: true,
+        };
+        bowlers.push(bowler);
+      } else {
+        bowlers.filter((bowler) => {
+          if (bowler.id === item.existingBowler.id) bowler.isActive = true;
+        });
+      }
+      state.innings[ings].overs.push({ over: [{ balls: [] }] });
+      this.dispatch("toggleBowler");
     },
     UNDO_INGS(state, ings) {
       const overs = state.innings[ings].overs;
@@ -18,6 +50,23 @@ export default {
           if (index === lastItem) item.balls.splice(lastItem, 1);
         });
       });
+      this.dispatch("updateIngs", ings);
+    },
+    ADD_SCORE_TO_INNINGS(state, { ings, obj }) {
+      if (!state.innings[ings].overs) {
+        state.innings[ings].overs = [];
+        state.innings[ings].overs.push({ over: [{ balls: [obj] }] });
+      } else {
+        const overs = state.innings[ings].overs;
+        const lastindex = overs.length - 1;
+        overs.forEach((item, index) => {
+          if (lastindex === index) {
+            item.over.forEach((over) => {
+              over.balls.push(obj);
+            });
+          }
+        });
+      }
       this.dispatch("updateIngs", ings);
     },
     INDIVIDUAL_BATSMAN_SCORE(state, ings) {
@@ -138,41 +187,13 @@ export default {
         });
       });
     },
-    ADD_SCORE_TO_INNINGS(state, { ings, obj, wicket }) {
-      if (!state.innings[ings].overs) {
-        state.innings[ings].overs = [];
-        state.innings[ings].overs.push({ over: [{ balls: [obj] }] });
-      } else {
-        const overs = state.innings[ings].overs;
-        const lastindex = overs.length - 1;
-        overs.forEach((item, index) => {
-          if (lastindex === index) {
-            item.over.forEach((over) => {
-              over.balls.push(obj);
-            });
-          }
-        });
-      }
-      if (Object.keys(wicket).length && wicket.newBatsman) {
-        let batsmans = state.innings[ings].batsmans;
-        let batsman = {};
-        batsman = {
-          name: wicket.newBatsman,
-          id: batsmans.length + 1,
-          isActive: false,
-        };
-        batsmans.push(batsman);
-      }
-
-      this.dispatch("updateIngs", ings);
-    },
   },
   actions: {
-    async addMatch({ commit }, match) {
+    async addMatch({ dispatch }, match) {
       await firebase.matchesCollection
         .add(match)
         .then(() => {
-          commit("INNINGS", match);
+          dispatch("fetchMatch", match);
           router.push({ name: "Play", params: { matchId: match.id } });
         })
         .catch((error) => {
@@ -192,7 +213,7 @@ export default {
           console.log(error);
         });
     },
-    async addIngsPlayers({ commit }, match) {
+    async addIngsPlayers({ dispatch }, match) {
       await firebase.matchesCollection
         .where("id", "==", parseInt(match.id))
         .get()
@@ -200,11 +221,22 @@ export default {
           res.forEach(function(doc) {
             firebase.matchesCollection.doc(doc.id).update(match);
           });
-          commit("INNINGS", match);
+          dispatch("fetchMatch", match);
           router.push({ name: "Scorecard", params: { match: match.id } });
         })
         .catch((error) => {
           console.log(error);
+        });
+    },
+    async toggleBowler({ state }) {
+      const innings = state.innings;
+      await firebase.matchesCollection
+        .where("id", "==", parseInt(innings.id))
+        .get()
+        .then(function(res) {
+          res.forEach(function(doc) {
+            firebase.matchesCollection.doc(doc.id).update(innings);
+          });
         });
     },
     async updateIngs({ state, commit }, ings) {
@@ -228,6 +260,7 @@ export default {
   },
   getters: {
     innings: (state) => state.innings,
+    score: (state) => state.score,
     overLimit: (state) => state.innings.overs,
   },
 };

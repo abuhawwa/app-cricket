@@ -1,27 +1,17 @@
 import * as firebase from "@/firebase";
 export default {
-  state: () => ({
+  state: {
     batters: [],
     striker: {},
     nonStriker: {},
-  }),
+  },
   mutations: {
     BATTERS(state, items) {
       state.batters = items;
     },
     STRIKER(state, item) {
-      if (!item) {
-        let batters = state.batters;
-        batters.filter((batsman) => {
-          if (!batsman.isOut) {
-            batsman.isActive = true;
-            state.striker = batsman;
-          }
-        });
-      } else {
-        item.isActive = true;
-        state.striker = item;
-      }
+      item.isActive = true;
+      state.striker = item;
     },
     NON_STRIKER(state, item) {
       item.isActive = false;

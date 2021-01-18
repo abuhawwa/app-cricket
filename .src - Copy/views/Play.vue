@@ -75,11 +75,10 @@ export default {
       this.$store.dispatch("addIngsPlayers", innings);
     },
   },
-  async created() {
-    if (Object.keys(this.innings).length) return true;
+  created() {
     let payload = {};
     payload.id = this.$route.params.matchId;
-    await this.$store.dispatch("fetchMatch", payload);
+    this.$store.dispatch("fetchMatch", payload);
   },
 };
 </script>
