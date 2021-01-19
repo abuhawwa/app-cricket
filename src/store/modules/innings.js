@@ -206,7 +206,8 @@ export default {
             firebase.matchesCollection.doc(doc.id).update(match);
           });
           commit("INNINGS", match);
-          router.push({ name: "Scorecard", params: { match: match.id } });
+          const ings = !match.firstIngs.isEnd ? "FirstIngs" : "SecondIngs";
+          router.push({ name: ings, params: { match: match.id } });
         })
         .catch((error) => {
           console.log(error);
@@ -230,7 +231,6 @@ export default {
         });
     },
     async endIngs({ state }) {
-      debugger;
       const innings = state.innings;
       await firebase.matchesCollection
         .where("id", "==", parseInt(innings.id))

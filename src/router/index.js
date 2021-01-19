@@ -23,15 +23,26 @@ const routes = [
     component: () => import("../views/Play.vue"),
   },
   {
-    path: "/match/:matchId/scorecard",
-    name: "Scorecard",
-    component: () => import("../views/Scorecard.vue"),
+    path: "/match/:matchId/firstIngs",
+    name: "FirstIngs",
+    component: () => import("../views/FirstIngs.vue"),
+  },
+  {
+    path: "/match/:matchId/secondIngs",
+    name: "SecondIngs",
+    component: () => import("../views/SecondIngs.vue"),
+  },
+  {
+    path: "/match/:matchId/summary",
+    name: "Summary",
+    component: () => import("../views/Summary.vue"),
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  linkActiveClass: "active",
 });
 
 export default router;
