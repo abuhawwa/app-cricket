@@ -155,7 +155,8 @@ export default {
     },
     onIngsEnd() {
       const ings = this.ings;
-      this.$store.commit("INGS_END", ings);
+      if (confirm(`Are you sure, ${ings} Ends?`))
+        this.$store.commit("INGS_END", ings);
     },
     score(val, type = "score") {
       let striker = this.getStriker;

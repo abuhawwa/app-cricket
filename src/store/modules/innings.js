@@ -169,6 +169,8 @@ export default {
     INGS_END(state, ings) {
       let innings = state.innings[ings];
       innings.isEnd = true;
+      const route = ings === "firstIngs" ? "Play" : null;
+      router.push({ name: route });
       this.dispatch("endIngs");
     },
   },
