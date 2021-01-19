@@ -17,7 +17,7 @@
     <Batsman :ingsBatsmans="innings.batsmans" />
     <Bowler :ingsBowlers="innings.bowlers" />
     <FollowOver :data="innings.overs" />
-    <ScorePanel />
+    <ScorePanel v-if="!innings.isEnd" />
   </div>
 </template>
 
