@@ -163,7 +163,6 @@ export default {
         };
         batsmans.push(batsman);
       }
-
       this.dispatch("updateIngs", ings);
     },
     INGS_END(state, ings) {
@@ -216,6 +215,7 @@ export default {
         });
     },
     async updateIngs({ state, commit }, ings) {
+      debugger;
       commit("INDIVIDUAL_BATSMAN_SCORE", ings);
       commit("INDIVIDUAL_BOWLER_SCORE", ings);
       commit("TEAM_SCORE", ings);
