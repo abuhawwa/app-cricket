@@ -11,7 +11,7 @@
         <td>
           <button type="button" class="btn w-100" @click="score(2)">2</button>
         </td>
-        <td class="bg-success" rowspan="2" @click="onUndo">
+        <td class="bg-success" @click="onUndo">
           <button type="button" class="btn w-100 text-white">Undo</button>
         </td>
       </tr>
@@ -24,6 +24,9 @@
         </td>
         <td>
           <button type="button" class="btn w-100" @click="score(6)">6</button>
+        </td>
+        <td class="bg-warning">
+          <router-link to="/" class="btn w-100 text-white">Home</router-link>
         </td>
       </tr>
       <tr>

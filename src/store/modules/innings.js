@@ -215,7 +215,6 @@ export default {
         });
     },
     async updateIngs({ state, commit }, ings) {
-      debugger;
       commit("INDIVIDUAL_BATSMAN_SCORE", ings);
       commit("INDIVIDUAL_BOWLER_SCORE", ings);
       commit("TEAM_SCORE", ings);
@@ -232,8 +231,15 @@ export default {
           console.log(error);
         });
     },
-    async endIngs({ state }) {
-      const innings = state.innings;
+    async endIngs({ state, commit }) {
+      let innings = state.innings;
+      if (innings.secondIngs.isEnd) {
+        const firstIngsRuns = innings.firstIngs.score.runs;
+        const secondIngsRuns = innings.secondIngs.score.runs;
+        if (firstIngsRuns > secondIngsRuns) innings.firstIngs.isWon = true;
+        else innings.secondIngs.isWon = true;
+        commit("INNINGS", innings);
+      }
       await firebase.matchesCollection
         .where("id", "==", parseInt(innings.id))
         .get()

@@ -3,7 +3,9 @@
     <div class="card">
       <h5 class="card-header clearfix">
         New Match
-        <a href="#" class="btn btn-info btn-sm float-end">Home</a>
+        <router-link to="/" class="btn btn-info btn-sm float-end text-white"
+          >Home</router-link
+        >
       </h5>
       <div class="card-body">
         <form autocomplete="off" @submit.prevent="onMatch">

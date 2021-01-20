@@ -1,12 +1,44 @@
 <template>
   <div class="summary">
-    <button class="btn w-50" type="button" @click="onFirstIngs">
-      1st Innings
-    </button>
-    <button class="btn w-50" type="button" @click="onSecondIngs">
-      2nd Innings
-    </button>
-    <div v-if="ings">
+    <div
+      class="border-bottom border-primary mb-3 d-flex justify-content-between"
+    >
+      <button
+        :class="['btn col', ings === 'firstIngs' ? 'btn-primary' : null]"
+        type="button"
+        @click="onFirstIngs"
+        style="outline: none !important"
+      >
+        1st Innings
+      </button>
+      <button
+        :class="['btn col', ings === 'secondIngs' ? 'btn-primary' : null]"
+        type="button"
+        @click="onSecondIngs"
+        style="outline: none !important"
+      >
+        2nd Innings
+      </button>
+      <router-link to="/" class="btn col">Home</router-link>
+    </div>
+    <div v-if="Object.keys(innings).length">
+      <h6>{{ innings[ings].team }}</h6>
+      <ul
+        class="list-unstyled d-flex justify-content-between align-items-baseline"
+      >
+        <li>
+          <h5 class="fw-bold">
+            {{ innings[ings].score?.runs }} - {{ innings[ings].score?.wickets }}
+            <small
+              >&nbsp;({{ innings[ings].score?.overs }}/{{ overLimit }})</small
+            >
+          </h5>
+        </li>
+        <li>
+          <h6>Extras: {{ innings[ings].score.extras }}</h6>
+        </li>
+      </ul>
+
       <table class="table">
         <thead>
           <tr>
@@ -19,7 +51,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(batsman, index) in batters" :key="index">
+          <tr
+            v-for="(batsman, index) in batters"
+            :key="index"
+            :class="[batsman.isOut ? 'text-muted' : 'text-dark']"
+          >
             <td>
               <label>{{ batsman.name }}</label>
             </td>
@@ -69,11 +105,11 @@ export default {
     return {
       batters: [],
       bowlers: [],
-      ings: "",
+      ings: "firstIngs",
     };
   },
   computed: {
-    ...mapGetters(["innings"]),
+    ...mapGetters(["innings", "overLimit"]),
   },
   methods: {
     onFirstIngs() {
