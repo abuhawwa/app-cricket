@@ -46,6 +46,15 @@ export default {
       let batters = this.ingsBatsmans.filter((item) => {
         return !item.isOut;
       });
+      const striker = batters.filter((item) => {
+        return item.isActive;
+      });
+      const nonStriker = batters.filter((item) => {
+        return !item.isActive;
+      });
+      this.$store.commit("BATTERS", batters);
+      this.$store.commit("STRIKER", striker[0]);
+      this.$store.commit("NON_STRIKER", nonStriker[0]);
       return batters;
     },
     activeStriker: {
@@ -62,18 +71,6 @@ export default {
         this.$store.dispatch("toggleStriker");
       },
     },
-  },
-  async created() {
-    const batters = this.batters;
-    const striker = batters.filter((item) => {
-      return item.isActive;
-    });
-    const nonStriker = batters.filter((item) => {
-      return !item.isActive;
-    });
-    await this.$store.commit("BATTERS", batters);
-    await this.$store.commit("STRIKER", striker[0]);
-    await this.$store.commit("NON_STRIKER", nonStriker[0]);
   },
 };
 </script>

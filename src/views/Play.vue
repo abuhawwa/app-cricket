@@ -57,7 +57,6 @@ export default {
   },
   methods: {
     onPlay() {
-      debugger;
       let innings = JSON.parse(JSON.stringify(this.innings));
       const batsmans = [
         { name: this.striker, isActive: true, id: 1 },
