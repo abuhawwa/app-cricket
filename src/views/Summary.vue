@@ -135,6 +135,7 @@ export default {
     let payload = {};
     payload.id = this.$route.params.matchId;
     await this.$store.dispatch("fetchMatch", payload);
+    this.onFirstIngs();
   },
 };
 </script>

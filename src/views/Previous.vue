@@ -52,7 +52,7 @@
         </router-link>
       </div>
     </div>
-    <div class="row" v-else>
+    <div class="row" v-if="!items.length && !isLoader">
       <div class="col-12">
         <div class="alert alert-danger text-center my-5" role="alert">
           No matches found!
@@ -60,6 +60,7 @@
         </div>
       </div>
     </div>
+    <div v-if="isLoader">loading...</div>
   </div>
 </template>
 
@@ -71,6 +72,7 @@ export default {
   data() {
     return {
       items: [],
+      isLoader: true,
     };
   },
   methods: {
@@ -89,7 +91,9 @@ export default {
     await firebase.matchesCollection
       .get()
       .then((res) => {
+        this.isLoader = false;
         res.forEach((item) => {
+          debugger;
           this.items.push(item.data());
         });
       })
